@@ -31,17 +31,17 @@ Para que o seu código consiga interagir com o Revit, precisamos adicionar as bi
 
 1. No *Solution Explorer*, clique com o botão direito em **Dependencies** e selecione **Add Project Reference**.
 
-   ![Dependencies](caminho_da_imagem/imagem_dependencies.png)
-   ![Add Project Reference](caminho_da_imagem/imagem_add_reference.png)
+   ![Dependencies](Imagens/Imagem5.png)
+   ![Add Project Reference](Imagens/Imagem6.png)
 
 2. Na janela que se abrir, clique em **Browse** e navegue até a pasta de instalação do Revit: `C:\Program Files\Autodesk\Revit 2025`.
 3. Selecione e adicione os arquivos `RevitAPI.dll` e `RevitAPIUI.dll`.
 
-   ![Browse DLLs](caminho_da_imagem/imagem_browse_dll.png)
+   ![Browse DLLs](Imagens/Imagem7.png)
 
 4. **Passo Crucial:** Selecione as duas referências recém-adicionadas, abra a janela de Propriedades (Properties) e mude a opção **Copy Local** para **No**.
 
-   ![Copy Local No](caminho_da_imagem/imagem_copy_local.png)
+   ![Copy Local No](Imagens/Imagem8.png)
 
 5. Agora, dê um duplo clique no nome do projeto no *Solution Explorer* para abrir o arquivo `.csproj`. Altere o bloco `<PropertyGroup>` para garantir que contenha as seguintes propriedades:
 
@@ -60,27 +60,27 @@ Vamos configurar o Visual Studio para iniciar o Revit automaticamente ao clicarm
 
 1. Clique com o botão direito no projeto e selecione **Properties**.
 
-   ![Properties](caminho_da_imagem/imagem_properties.png)
+   ![Properties](Imagens/Imagem9.png)
 
 2. No menu lateral, vá em **Debug** > **General** e clique em **Open debug launch profiles UI**.
 
-   ![Debug UI](caminho_da_imagem/imagem_debug_ui.png)
+   ![Debug UI](Imagens/Imagem10.png)
 
 3. No canto superior esquerdo, crie um novo perfil clicando no ícone e escolhendo **Executable**.
 
-   ![Novo Executable](caminho_da_imagem/imagem_new_executable.png)
+   ![Novo Executable](Imagens/Imagem11.png)
 
 4. No campo *Executable*, aponte para o arquivo `Revit.exe` localizado em `C:\Program Files\Autodesk\Revit 2025`.
 
-   ![Caminho Revit.exe](caminho_da_imagem/imagem_revit_exe.png)
+   ![Caminho Revit.exe](Imagens/Imagem12.png)
 
 5. Renomeie este perfil para **REVIT**.
 
-   ![Renomear Perfil](caminho_da_imagem/imagem_rename_profile.png)
+   ![Renomear Perfil](Imagens/Imagem13.png)
 
 6. Feche essa janela e, na barra superior do Visual Studio, troque o botão de inicialização (botão verde) para o executável **REVIT** que você acabou de criar.
 
-   ![Selecionar Perfil REVIT](caminho_da_imagem/imagem_select_profile.png)
+   ![Selecionar Perfil REVIT](Imagens/Imagem14.png)
 
 7. Voltando à janela de **Properties**, vá em **Build** > **Events** e cole o seguinte código no campo **Post-Build event**. Este script copia os arquivos automaticamente após compilar:
 
@@ -99,7 +99,7 @@ xcopy "$(TargetDir)ResourcesARQFlow" "%AppData%\Autodesk\Revit\Addins\2025\ARQFl
 ```
 *Observação: Lembre-se de substituir "ARQFlow" pelo nome do seu projeto, caso seja diferente.*
 
-   ![Post Build Event](caminho_da_imagem/imagem_post_build.png)
+   ![Post Build Event](Imagens/Imagem15.png)
 
 ---
 
@@ -109,105 +109,107 @@ xcopy "$(TargetDir)ResourcesARQFlow" "%AppData%\Autodesk\Revit\Addins\2025\ARQFl
 2. Substitua o conteúdo do arquivo `App.cs` pelo código abaixo (lembre-se de ajustar o `namespace` para o nome do seu projeto):
 
 ```csharp
-using System;
-using System.IO;
-using System.Reflection;
-using System.Windows.Media.Imaging;
-using Autodesk.Revit.UI;
-
-namespace ARQFlow
-{
-    public class App : IExternalApplication
-    {
-        // Esse é o "ajudante" que coloca a imagem no botão
-        private void SetIcon(PushButton button, string iconPath)
-        {
-            if (!File.Exists(iconPath))
-                return;
-
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(iconPath, UriKind.Absolute);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze(); // Importante para não travar o arquivo no Windows
-
-            button.LargeImage = bitmap; // Ícone grande (32x32)
-            button.Image = bitmap;      // Ícone pequeno (16x16)
-        }
-
-        public Result OnStartup(UIControlledApplication application)
-        {
-            // 1. Cria uma aba personalizada
-            string tabName = "ARQFlow";
-            try
-            {
-                application.CreateRibbonTab(tabName);
-            }
-            catch { /* Aba já existe */ }
-
-            // 2. Cria um painel dentro da aba
-            RibbonPanel panel = application.CreateRibbonPanel(tabName, "Ferramentas");
-
-            // 3. Define os caminhos (Onde está a DLL e a pasta de ícones)
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
-            string dllFolder = Path.GetDirectoryName(assemblyPath);
-
-            // 4. Configura os dados do botão
-            PushButtonData buttonData = new PushButtonData(
-                "btnHelloWorld",
-                "Hello\nWorld",
-                assemblyPath,
-                "ARQFlow.Commands.Command"
-            );
-
-            // 5. ADICIONA O BOTÃO AO PAINEL
-            PushButton myButton = panel.AddItem(buttonData) as PushButton;
-
-            // 6. COLOCA O ÍCONE
-            string iconFullPath = Path.Combine(dllFolder, "Resources", "hello-word.ico");
-            SetIcon(myButton, iconFullPath);
-
-            return Result.Succeeded;
-        }
-
-        public Result OnShutdown(UIControlledApplication application)
-        {
-            return Result.Succeeded;
-        }
-    }
-}
+   using System;
+   using System.IO;
+   using System.Reflection;
+   using System.Windows.Media.Imaging;
+   using Autodesk.Revit.UI;
+   
+   namespace ARQFlow
+   {
+       public class App : IExternalApplication
+       {
+           // Esse é o "ajudante" que coloca a imagem no botão
+           private void SetIcon(PushButton button, string iconPath)
+           {
+               if (!File.Exists(iconPath))
+                   return;
+   
+               var bitmap = new BitmapImage();
+               bitmap.BeginInit();
+               bitmap.UriSource = new Uri(iconPath, UriKind.Absolute);
+               bitmap.CacheOption = BitmapCacheOption.OnLoad;
+               bitmap.EndInit();
+               bitmap.Freeze(); // Importante para não travar o arquivo no Windows
+   
+               button.LargeImage = bitmap; // Ícone grande (32x32)
+               button.Image = bitmap;      // Ícone pequeno (16x16)
+           }
+   
+           public Result OnStartup(UIControlledApplication application)
+           {
+               // 1. Cria uma aba personalizada
+               string tabName = "ARQFlow";
+               try
+               {
+                   application.CreateRibbonTab(tabName);
+               }
+               catch { /* Aba já existe */ }
+   
+               // 2. Cria um painel dentro da aba
+               RibbonPanel panel = application.CreateRibbonPanel(tabName, "Ferramentas");
+   
+               // 3. Define os caminhos (Onde está a DLL e a pasta de ícones)
+               string assemblyPath = Assembly.GetExecutingAssembly().Location;
+               string dllFolder = Path.GetDirectoryName(assemblyPath);
+   
+               // 4. Configura os dados do botão
+               PushButtonData buttonData = new PushButtonData(
+                   "btnHelloWorld",
+                   "Hello\nWorld",
+                   assemblyPath,
+                   "ARQFlow.Commands.Command"
+               );
+   
+               // 5. ADICIONA O BOTÃO AO PAINEL
+               // Note que guardamos o botão na variável 'myButton' para poder colocar o ícone depois
+               PushButton myButton = panel.AddItem(buttonData) as PushButton;
+   
+               // 6. COLOCA O ÍCONE
+               // Ele vai procurar na pasta: %AppData%\Autodesk\Revit\Addins\2025\ResourcesARQFlow\hello-word.ico
+               string iconFullPath = Path.Combine(dllFolder, "ResourcesARQFlow", "hello-word.ico");
+               SetIcon(myButton, iconFullPath);
+   
+               return Result.Succeeded;
+           }
+   
+           public Result OnShutdown(UIControlledApplication application)
+           {
+               return Result.Succeeded;
+           }
+       }
+   }
 ```
 
 3. Crie uma pasta chamada **Commands** na raiz do projeto.
 
-   ![Pasta Commands](caminho_da_imagem/imagem_folder_commands.png)
+   ![Pasta Commands](Imagens/Imagem16.png)
 
 4. Dentro da pasta `Commands`, crie uma classe chamada `Command.cs` e cole o código abaixo:
 
 ```csharp
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.UI;
-
-namespace ARQFlow.Commands
-{
-    [Transaction(TransactionMode.Manual)]
-    public class Command : IExternalCommand
-    {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            TaskDialog.Show("ARQFlow", "Hello World! Comando executado da pasta Commands.");
-            return Result.Succeeded;
-        }
-    }
-}
+   using Autodesk.Revit.Attributes;
+   using Autodesk.Revit.DB;
+   using Autodesk.Revit.UI;
+   
+   namespace ARQFlow.Commands
+   {
+       [Transaction(TransactionMode.Manual)]
+       public class Command : IExternalCommand
+       {
+           public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+           {
+               TaskDialog.Show("ARQFlow", "Hello World! Comando executado da pasta Commands.");
+               return Result.Succeeded;
+           }
+       }
+   }
 ```
 
 5. Crie uma pasta chamada **Resources** na raiz do projeto e coloque o seu arquivo de ícone (`hello-word.ico`) dentro dela. 
 6. Selecione o ícone no *Solution Explorer*, vá nas Propriedades e altere **Copy to Output Directory** para **Copy if newer**.
 
-   ![Copy Icon](caminho_da_imagem/imagem_copy_icon.png)
+   ![Copy Icon](Imagens/Imagem17.png)
 
 ---
 
@@ -233,12 +235,12 @@ O arquivo `.addin` é responsável por avisar ao Revit que o seu plugin existe.
 2. Altere as tags `<Name>`, `<FullClassName>`, `<Assembly>` e `<VendorId>` para as informações reais do seu projeto.
 3. Para gerar a tag `<AddInId>`, vá no menu superior do Visual Studio em **Tools** > **Create GUID**.
 
-   ![Create GUID Menu](caminho_da_imagem/imagem_create_guid.png)
+   ![Create GUID Menu](Imagens/Imagem18.png)
 
 4. Escolha o formato **4. Formato de Registro**, clique em **Copiar** e cole o valor dentro da tag `<AddInId>`, **retirando as chaves `{ }`**.
 
-   ![Copiar GUID](caminho_da_imagem/imagem_copy_guid.png)
-   ![Colar GUID](caminho_da_imagem/imagem_paste_guid.png)
+   ![Copiar GUID](Imagens/Imagem19.png)
+   ![Colar GUID](Imagens/Imagem20.png)
 
 5. Selecione o arquivo `.addin` no *Solution Explorer* e, nas Propriedades, altere **Copy to Output Directory** para **Copy if newer**.
 
@@ -250,4 +252,4 @@ Salve tudo e clique em **Build > Build Solution** (ou pressione F6). Em seguida,
 
 Se tudo estiver correto, o seu primeiro plugin aparecerá na Ribbon do Revit, pronto para uso!
 
-![Resultado Final](caminho_da_imagem/imagem_resultado_final.png)
+![Resultado Final](Imagens/Imagem21.png)
