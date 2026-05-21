@@ -1,4 +1,3 @@
-# Plugin_Revit_Tutorial.NET8
 # Tutorial: Como criar o primeiro projeto no Revit 2025 em diante (.NET 8.0)
 
 Este guia demonstra o passo a passo para configurar e criar o seu primeiro plugin para o Revit (versões 2025 ou superiores), utilizando o Visual Studio e a plataforma .NET 8.0.
