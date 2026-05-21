@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>..\..\..\..\Program Files\Autodesk\Revit 2025\RevitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\..\..\..\Program Files\Autodesk\Revit 2025\RevitAPIUI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ARQFlow.addin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ResourcesARQFlow\hello-word.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command=":: 1. Cria a pasta dedicada para o seu plugin se ela ainda não existir&#xD;&#xA;if not exist &quot;%25AppData%25\Autodesk\Revit\Addins\2025\ARQFlow&quot; mkdir &quot;%25AppData%25\Autodesk\Revit\Addins\2025\ARQFlow&quot;&#xD;&#xA;&#xD;&#xA;:: 2. Copia APENAS o arquivo .addin para a raiz do Revit&#xD;&#xA;copy &quot;$(TargetDir)ARQFlow.addin&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\&quot; /Y&#xD;&#xA;&#xD;&#xA;:: 3. Copia APENAS a .dll para dentro da pasta dedicada do ARQFlow&#xD;&#xA;copy &quot;$(TargetDir)ARQFlow.dll&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\ARQFlow\&quot; /Y&#xD;&#xA;&#xD;&#xA;:: 4. Copia a pasta de recursos inteira para dentro da pasta dedicada&#xD;&#xA;xcopy &quot;$(TargetDir)ResourcesARQFlow&quot; &quot;%25AppData%25\Autodesk\Revit\Addins\2025\ARQFlow\ResourcesARQFlow\&quot; /Y /I /E" />
+  </Target>
+
+</Project>
