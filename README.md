@@ -8,20 +8,20 @@ Este guia demonstra o passo a passo para configurar e criar o seu primeiro plugi
 
 1. Abra o **Visual Studio** e clique em **Create a new Project**.
    
-   ![Visual Studio - Create Project](caminho_da_imagem/imagem_create_project.png)
+   ![Visual Studio - Create Project](Imagens/Imagem1.png)
 
 2. Na barra de pesquisa, procure por **Class Library**.
    * ⚠️ **Aviso:** Escolha a opção que diz *apenas* `Class Library`. Fuja da opção que tem ".NET Framework" no nome!
 
-   ![Pesquisar Class Library](caminho_da_imagem/imagem_class_library.png)
+   ![Pesquisar Class Library](Imagens/Imagem2.png)
 
 3. Escolha o **nome do seu projeto**, defina a **localização** no seu computador e clique em **Next**.
 
-   ![Configurar Nome e Localização](caminho_da_imagem/imagem_nome_projeto.png)
+   ![Configurar Nome e Localização](Imagens/Imagem3.png)
 
 4. Na tela de informações adicionais, selecione o Framework **.NET 8.0 (Long Term Support)** e clique em **Create**.
 
-   ![Escolher NET 8](caminho_da_imagem/imagem_net8.png)
+   ![Escolher NET 8](Imagens/Imagem4.png)
 
 ---
 
